@@ -11,7 +11,11 @@ export async function POST() {
 
   const id = cookieStore.get('id')!.value
 
-  const { status, body } = await liveblocks.identifyUser(id)
+  const { status, body } = await liveblocks.identifyUser(id, {
+    userInfo: {
+      name: id,
+    },
+  })
 
   return new Response(body, { status })
 }
