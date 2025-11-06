@@ -7,7 +7,7 @@ import {
   ClientSideSuspense,
 } from '@liveblocks/react/suspense'
 import { UUID } from 'crypto'
-import { LiveList } from '@liveblocks/client'
+import { LiveMap } from '@liveblocks/client'
 
 export function Room({
   tabId,
@@ -20,7 +20,7 @@ export function Room({
     <LiveblocksProvider authEndpoint="/api/liveblocks-auth">
       <RoomProvider
         id={tabId}
-        initialStorage={{ currentOrder: new LiveList([]) }}
+        initialStorage={{ currentOrder: new LiveMap([]) }}
       >
         <ClientSideSuspense fallback={<div>Loading…</div>}>
           {children}

@@ -1,16 +1,16 @@
-import { MenuItemId } from '@/lib/db/restaurant'
-import { LiveList, LiveObject } from '@liveblocks/client'
+import { MenuItemId, OwnerId, TmpOrderItemId } from '@/lib/types'
+import { LiveList, LiveMap, LiveObject } from '@liveblocks/client'
 import { UUID } from 'crypto'
 
 declare global {
   interface Liveblocks {
     Storage: {
-      currentOrder: LiveList<
+      currentOrder: LiveMap<
+        TmpOrderItemId,
         LiveObject<{
-          id: string
+          id: TmpOrderItemId
           quantity: number
-          guestOwnerIds: LiveList<string>
-          customerOwnerIds: LiveList<UUID>
+          ownerIds: LiveList<OwnerId>
           menuItemId: MenuItemId
         }>
       >
@@ -18,7 +18,7 @@ declare global {
 
     // Custom user info set when authenticating with a secret key
     UserMeta: {
-      id: string
+      id: `${number}`
       info: {
         name: string
         avatar?: string

@@ -1,29 +1,22 @@
-import { randomUUID, UUID } from 'crypto'
-import { RestaurantId } from './restaurant'
+import { randomUUID } from 'crypto'
+import { CustomerId, RestaurantId, Tab, TabId } from '../types'
+import * as data from './data'
 
-export type TabId = UUID
-
-export type Tab = {
-  id: TabId
-  restaurantId: RestaurantId
-  createdAt: Date
-  closedAt?: Date
-}
-
-globalThis.data ??= new Map<TabId, Tab>()
-const data = globalThis.data
-
-export function createTab(restaurantId: RestaurantId) {
+export async function createTab(restaurantId: RestaurantId) {
   const tab: Tab = {
     id: randomUUID(),
     restaurantId: restaurantId,
     createdAt: new Date(),
+    orders: [],
   }
-  data.set(tab.id, tab)
+  data.tabs.set(tab.id, tab)
   return tab.id
 }
 
-export function getTab(tabId: TabId) {
-  console.log('Data', data)
-  return data.get(tabId)
+export async function getTab(tabId: TabId) {
+  return data.tabs.get(tabId)
+}
+
+export async function getVisitedTabs(customerId: CustomerId) {
+  return data.visitedTabs.get(customerId)
 }
