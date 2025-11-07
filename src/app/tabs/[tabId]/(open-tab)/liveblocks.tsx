@@ -10,29 +10,38 @@ export function useCollaborativeOrdering() {
   const incrementQuantity = useMutation(
     ({ storage, self }, id: TmpOrderItemId) => {
       const orderItem = storage.get('currentOrder').get(id)!
-      const ownerIds = orderItem.get('ownerIds')
       const quantity = orderItem.get('quantity')
+      const ownerIds = orderItem.get('ownerIds')
+      const isSharing = quantity !== ownerIds.length
       const indexOfUserId = ownerIds.indexOf(self.id)
       const isOwner = indexOfUserId > -1
-      if (!isOwner && quantity === ownerIds.length) {
+
+      orderItem.set('quantity', quantity + 1)
+      if (!isSharing && !isOwner) {
         ownerIds.push(self.id)
       }
-      orderItem.set('quantity', quantity + 1)
     },
     [],
   )
 
   const decrementQuantity = useMutation(
     ({ storage, self }, id: TmpOrderItemId) => {
-      const orderItem = storage.get('currentOrder').get(id)!
-      const ownerIds = orderItem.get('ownerIds')
+      const currentOrder = storage.get('currentOrder')
+      const orderItem = currentOrder.get(id)!
       const quantity = orderItem.get('quantity')
-      const indexOfUserId = ownerIds.indexOf(self.id)
-      const isOwner = indexOfUserId > -1
-      if (isOwner && quantity === ownerIds.length) {
-        ownerIds.delete(indexOfUserId)
+      if (quantity > 1) {
+        const ownerIds = orderItem.get('ownerIds')
+        const isSharing = quantity !== ownerIds.length
+        const indexOfUserId = ownerIds.indexOf(self.id)
+        const isOwner = indexOfUserId > -1
+
+        orderItem.set('quantity', quantity - 1)
+        if (!isSharing && isOwner) {
+          ownerIds.delete(indexOfUserId)
+        }
+      } else {
+        currentOrder.delete(id)
       }
-      orderItem.set('quantity', quantity - 1)
     },
     [],
   )
@@ -58,10 +67,6 @@ export function useCollaborativeOrdering() {
       const isOwner = indexOfUserId > -1
       if (isOwner) {
         ownerIds.delete(indexOfUserId)
-        const quantity = orderItem.get('quantity')
-        if (quantity > ownerIds.length) {
-          orderItem.set('quantity', quantity - 1)
-        }
       }
     },
     [],
@@ -88,10 +93,6 @@ export function useCollaborativeOrdering() {
       const isOwner = indexOfUserId > -1
       if (isOwner) {
         ownerIds.delete(indexOfUserId)
-        const quantity = orderItem.get('quantity')
-        if (quantity > ownerIds.length) {
-          orderItem.set('quantity', quantity - 1)
-        }
       }
     },
     [],
