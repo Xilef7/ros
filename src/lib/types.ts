@@ -31,13 +31,16 @@ export type OwnerId = GuestId | CustomerId
 export type OrderItem = {
   id: OrderItemId
   quantity: number
+  customizations: Map<string, Set<string>>
   ownerIds: OwnerId[]
   menuItemId: MenuItemId
+  price: number
 }
 
 export type TmpOrderItem = {
   id: TmpOrderItemId
   quantity: number
+  customizations: Map<string, Set<string>>
   ownerIds: OwnerId[]
   menuItemId: MenuItemId
 }
@@ -60,9 +63,20 @@ export type MenuItem = {
   photoPathinfo: string
   price: number
   portionSize: number
+  customizations: Customization[]
   available: boolean
   menuTagIds: MenuTagId[]
   createdAt: Date
+}
+
+export type Customization = {
+  name: string
+  minRequired: number
+  maxAdditional: number
+  options: {
+    name: string
+    price: number
+  }[]
 }
 
 export type MenuTagId = `${RestaurantId}.${number}`

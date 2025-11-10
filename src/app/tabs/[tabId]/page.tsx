@@ -55,6 +55,7 @@ async function TabSummary({ tabIdPromise }: { tabIdPromise: Promise<UUID> }) {
               src={restaurant.photoPathinfo}
               alt={restaurant.name ?? 'restaurant'}
               width={100}
+              height={100}
               className="w-16 h-16 rounded-md object-cover"
             />
           ) : (

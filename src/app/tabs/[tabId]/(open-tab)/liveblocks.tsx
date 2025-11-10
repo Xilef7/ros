@@ -119,6 +119,7 @@ export function useCollaborativeOrdering() {
     currentOrder,
     incrementQuantity,
     decrementQuantity,
+    addableOwnerIds: ['1', '2', '3'] as OwnerId[],
     addOwner,
     removeOwner,
     addSelfToOwner,
