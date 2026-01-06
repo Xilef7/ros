@@ -14,7 +14,7 @@ import { paginationOptsValidator } from 'convex/server'
 export const list = query({
   args: { paginationOpts: paginationOptsValidator },
   handler: (ctx, args) =>
-    tryCatch(() => ctx.db.query('restaurants').paginate(args.paginationOpts)),
+    ctx.db.query('restaurants').paginate(args.paginationOpts),
 })
 
 export const get = query({
