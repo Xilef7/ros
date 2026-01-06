@@ -1,38 +1,56 @@
-import { getRestaurant } from '@/lib/db/restaurant'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { fetchQuery } from 'convex/nextjs'
+import { api } from '@/convex/_generated/api'
 import { RestaurantId } from '@/lib/types'
-import Image from 'next/image'
+import Cover from '@/components/cover'
+import MenuBrowser from './menu-browser'
+import { ButtonGroup } from '@/components/ui/button-group'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { NotepadTextDashedIcon } from 'lucide-react'
 
 export default async function Page({
   params,
-}: {
-  params: Promise<{ restaurantId: RestaurantId }>
-}) {
+}: PageProps<'/restaurants/[restaurantId]'>) {
   const { restaurantId } = await params
-  const restaurant = await getRestaurant(restaurantId)
+  const restaurant = await fetchQuery(api.restaurants.get, {
+    restaurantId: restaurantId as RestaurantId,
+  })
 
-  if (!restaurant) {
-    notFound()
+  if ('error' in restaurant) {
+    switch (restaurant.error) {
+      case 'RESTAURANT_NOT_FOUND':
+        notFound()
+      default:
+        throw restaurant.error
+    }
   }
 
   return (
-    <main className="p-4">
-      <Image
-        src={restaurant.photoPathinfo}
-        alt={restaurant.name}
-        width={400}
-        height={160}
-        className="w-full h-48 object-cover rounded-lg mb-4"
-      />
-      <h1 className="text-2xl font-bold text-orange-700">{restaurant.name}</h1>
-      <p className="text-gray-600 mb-4">{restaurant.address}</p>
-      <Link
-        href={`/restaurants/${restaurant.id}/menu`}
-        className="inline-block bg-orange-500 text-white px-4 py-2 rounded shadow hover:bg-orange-600 transition"
-      >
-        View Menu
-      </Link>
-    </main>
+    <>
+      <main className="self-stretch">
+        <Cover
+          photoPathinfo={restaurant.photoPathinfo}
+          name={restaurant.name}
+          description={restaurant.address}
+        />
+        <MenuBrowser menu={restaurant.menu} />
+      </main>
+
+      <ButtonGroup className="fixed bottom-0 w-screen z-10 p-2 pb-4">
+        <Button
+          variant="default"
+          vibe="friendly"
+          className="w-full h-10"
+          aria-label="Check Order"
+          asChild
+        >
+          <Link href="order/current">
+            <NotepadTextDashedIcon />
+            Check Order
+          </Link>
+        </Button>
+      </ButtonGroup>
+    </>
   )
 }

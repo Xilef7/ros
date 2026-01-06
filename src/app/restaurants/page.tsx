@@ -1,43 +1,87 @@
-import Link from 'next/link'
-import { getAllRestaurants } from '@/lib/db/restaurant'
-import Image from 'next/image'
+'use client'
 
-export default async function RestaurantsPage() {
-  const restaurants = await getAllRestaurants()
+import { useEffect, useRef } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { api } from '@/convex/_generated/api'
+import { usePaginatedQuery } from 'convex/react'
+import { ImageOffIcon } from 'lucide-react'
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+} from '@/components/ui/item'
+import { Button } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
+
+export default function RestaurantsPage() {
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.restaurants.list,
+    {},
+    { initialNumItems: 5 },
+  )
+
+  const loadMoreRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!loadMoreRef.current) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && status === 'CanLoadMore') {
+          loadMore(5)
+        }
+      },
+      { rootMargin: '200px' }, // start loading a bit early
+    )
+
+    observer.observe(loadMoreRef.current)
+
+    return () => observer.disconnect()
+  }, [status, loadMore])
 
   return (
-    <main className="p-4">
-      <h1 className="text-2xl font-bold text-orange-600 mb-4">
-        Browse Restaurants
-      </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {restaurants.map((r) => (
-          <Link
-            key={r.id}
-            href={`/restaurants/${r.id}`}
-            className="bg-white rounded-lg shadow hover:shadow-lg transition flex flex-col"
-          >
-            <Image
-              src={r.photoPathinfo}
-              alt={r.name}
-              width={400}
-              height={160}
-              className="w-full h-40 object-cover rounded-t-lg"
-            />
-            <div className="p-4 flex-1 flex flex-col justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-orange-700">
-                  {r.name}
-                </h2>
-                <p className="text-sm text-gray-500">{r.address}</p>
-              </div>
-              <span className="mt-2 text-orange-500 font-medium">
-                View Details
-              </span>
-            </div>
-          </Link>
+    <main className="self-stretch p-4">
+      <h1 className="text-2xl font-semibold">Browse Restaurants</h1>
+
+      <ItemGroup className="my-4 gap-4">
+        {results.map((restaurant) => (
+          <Item key={restaurant._id} variant="outline">
+            <ItemMedia variant={restaurant.photoPathinfo ? 'image' : 'icon'}>
+              {restaurant.photoPathinfo ? (
+                <Image
+                  src={restaurant.photoPathinfo}
+                  alt={restaurant.name}
+                  width={400}
+                  height={160}
+                />
+              ) : (
+                <ImageOffIcon />
+              )}
+            </ItemMedia>
+
+            <ItemContent>
+              <ItemTitle>{restaurant.name}</ItemTitle>
+              <ItemDescription>{restaurant.address}</ItemDescription>
+            </ItemContent>
+
+            <ItemActions>
+              <Button asChild>
+                <Link href={`/restaurants/${restaurant._id}`}>See Menu</Link>
+              </Button>
+            </ItemActions>
+          </Item>
         ))}
-      </div>
+      </ItemGroup>
+
+      <div ref={loadMoreRef} style={{ height: 1 }} />
+
+      {status === 'LoadingMore' && <Spinner />}
+      {status === 'Exhausted' && <div>No more restaurants</div>}
     </main>
   )
 }

@@ -1,21 +1,12 @@
-import { MenuItemId, OwnerId, TmpOrderItemId } from '@/lib/types'
-import { LiveList, LiveMap, LiveObject } from '@liveblocks/client'
+import { LiveOrderItem, LiveOrderItemId } from '@/lib/types'
+import { LiveMap } from '@liveblocks/client'
 import { UUID } from 'crypto'
 
 declare global {
   interface Liveblocks {
     Storage: {
-      currentOrder: LiveMap<
-        TmpOrderItemId,
-        LiveObject<{
-          id: TmpOrderItemId
-          quantity: number
-          ownerIds: LiveList<OwnerId>
-          menuItemId: MenuItemId
-        }>
-      >
+      currentOrder: LiveMap<LiveOrderItemId, LiveOrderItem>
     }
-
     // Custom user info set when authenticating with a secret key
     UserMeta: {
       id: `${number}`

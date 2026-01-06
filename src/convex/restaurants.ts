@@ -1,0 +1,72 @@
+import { ConvexError, v } from 'convex/values'
+
+async function tryCatch<T>(fn: () => Promise<T>) {
+  try {
+    return await fn()
+  } catch (error) {
+    return { error: error instanceof ConvexError ? error.data : error }
+  }
+}
+import { query, QueryCtx } from './_generated/server'
+import { Id } from './_generated/dataModel'
+import { paginationOptsValidator } from 'convex/server'
+
+export const list = query({
+  args: { paginationOpts: paginationOptsValidator },
+  handler: (ctx, args) =>
+    tryCatch(() => ctx.db.query('restaurants').paginate(args.paginationOpts)),
+})
+
+export const get = query({
+  args: {
+    restaurantId: v.id('restaurants'),
+  },
+  handler: (ctx, args) =>
+    tryCatch(async () => {
+      const restaurant = await ctx.db.get(args.restaurantId)
+      if (!restaurant) {
+        throw new ConvexError('RESTAURANT_NOT_FOUND')
+      }
+
+      const menuItems = await getAvailableMenuItems(ctx, args.restaurantId)
+
+      return {
+        ...restaurant,
+        menu: menuItems,
+      }
+    }),
+})
+
+export const listMenuItems = query({
+  args: {
+    restaurantId: v.id('restaurants'),
+  },
+  handler: (ctx, args) =>
+    tryCatch(() => getAvailableMenuItems(ctx, args.restaurantId)),
+})
+
+export async function getAvailableMenuItems(
+  ctx: QueryCtx,
+  restaurantId: Id<'restaurants'>,
+) {
+  const restaurant = await ctx.db.get(restaurantId)
+  if (!restaurant) {
+    throw new ConvexError('RESTAURANT_NOT_FOUND')
+  }
+
+  const menuItems = (
+    await Promise.all(
+      restaurant.menu.map(async (menuItemId) => {
+        const menuItem = await ctx.db.get(menuItemId)
+        if (menuItem?.deletedAt) {
+          return null
+        }
+        return menuItem
+      }),
+    )
+  ).filter((menuItem) => menuItem !== null)
+
+  return Object.fromEntries(
+    menuItems.map((menuItem) => [menuItem._id, menuItem]),
+  )
+}

@@ -1,6 +1,11 @@
+import { Id } from '@/convex/_generated/dataModel'
+import { userId } from '@/convex/schema'
+import { User } from '@clerk/nextjs/server'
+import { LiveList, LiveMap, LiveObject } from '@liveblocks/client'
+import { Infer } from 'convex/values'
 import { UUID } from 'crypto'
 
-export type TabId = UUID
+export type TabId = Id<'tabs'>
 
 export type Tab = {
   id: TabId
@@ -10,7 +15,7 @@ export type Tab = {
   orders: Order[]
 }
 
-export type OrderId = `${TabId}.${number}`
+export type OrderId = `${TabId}.${number}` | string
 
 export type Order = {
   id: OrderId
@@ -18,13 +23,21 @@ export type Order = {
   sentAt: Date
 }
 
-export type TmpOrderItemId = UUID
+export type LiveOrderItemId = UUID
 
-export type OrderItemId = `${OrderId}.${number}`
+export type OrderItemId = `${OrderId}.${number}` | string
 
-export type GuestId = `${number}`
+export type LocalOrderItemId = UUID
 
-export type CustomerId = UUID
+export type GuestId = `GuestId.${string}`
+
+export type CustomerId = `CustomerId.${User['id']}`
+
+export type Customer = {
+  id: CustomerId
+  name: string
+  photoPathinfo: string
+}
 
 export type OwnerId = GuestId | CustomerId
 
@@ -37,15 +50,23 @@ export type OrderItem = {
   price: number
 }
 
-export type TmpOrderItem = {
-  id: TmpOrderItemId
+export type LiveOrderItem = LiveObject<{
+  id: LiveOrderItemId
   quantity: number
-  customizations: Map<string, Set<string>>
-  ownerIds: OwnerId[]
+  customizations: LiveMap<string, LiveList<string>>
+  ownerIds: LiveList<OwnerId>
+  menuItemId: MenuItemId
+}>
+
+export type LocalOrderItem = {
+  id: LocalOrderItemId
+  quantity: number
+  customizations: Record<string, string[]>
+  ownerCount: number
   menuItemId: MenuItemId
 }
 
-export type RestaurantId = `${number}`
+export type RestaurantId = Id<'restaurants'>
 
 export type Restaurant = {
   id: RestaurantId
@@ -54,13 +75,13 @@ export type Restaurant = {
   address: string
 }
 
-export type MenuItemId = `${RestaurantId}.${number}`
+export type MenuItemId = Id<'menuItems'>
 
 export type MenuItem = {
   id: MenuItemId
   name: string
   description?: string
-  photoPathinfo: string
+  photoPathinfo?: string
   price: number
   portionSize: number
   customizations: Customization[]
@@ -89,4 +110,40 @@ export type MenuTag = {
   prerequisites: MenuTag[]
   createdAt: Date
   deletedAt?: Date
+}
+
+export type Fee = {
+  linearValue?: number
+  constantValue?: number
+  recursiveFees?: Array<Fee>
+}
+
+export function convertDbToStrOwnerId({
+  kind,
+  value,
+}: {
+  kind: string
+  value: string
+}): OwnerId {
+  switch (kind) {
+    case 'CustomerId':
+    case 'GuestId':
+      return `${kind}.${value}`
+    default:
+      throw new Error('DB_OWNER_ID_INVALID')
+  }
+}
+
+export function convertStrToDbOwnerId(ownerId: string): Infer<typeof userId> {
+  const [kind, ...values] = ownerId.split('.')
+  switch (kind) {
+    case 'CustomerId':
+    case 'GuestId':
+      return {
+        kind,
+        value: values.join('.'),
+      }
+    default:
+      throw new Error('STR_OWNER_ID_INVALID')
+  }
 }

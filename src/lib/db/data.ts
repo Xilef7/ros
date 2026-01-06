@@ -16,14 +16,35 @@ const restaurant2Id: RestaurantId = '2'
 const restaurant3Id: RestaurantId = '3'
 
 // === CUSTOMERS & GUESTS ===
-const customer1Id: CustomerId = '32142ab8-e66d-4ba4-8ff0-953b940a0d32'
-const customer2Id: CustomerId = '32142ab8-e66d-4ba4-8ff0-953b940a0d33'
-const customer3Id: CustomerId = '32142ab8-e66d-4ba4-8ff0-953b940a0d34'
-const customer4Id: CustomerId = '32142ab8-e66d-4ba4-8ff0-953b940a0d35'
+const customer1Id: CustomerId = {
+  kind: 'CustomerId',
+  value: '32142ab8-e66d-4ba4-8ff0-953b940a0d32',
+}
+const customer2Id: CustomerId = {
+  kind: 'CustomerId',
+  value: '32142ab8-e66d-4ba4-8ff0-953b940a0d33',
+}
+const customer3Id: CustomerId = {
+  kind: 'CustomerId',
+  value: '32142ab8-e66d-4ba4-8ff0-953b940a0d34',
+}
+const customer4Id: CustomerId = {
+  kind: 'CustomerId',
+  value: '32142ab8-e66d-4ba4-8ff0-953b940a0d35',
+}
 
-const guest1Id: GuestId = '1'
-const guest2Id: GuestId = '2'
-const guest3Id: GuestId = '3'
+const guest1Id: GuestId = {
+  kind: 'GuestId',
+  value: '1',
+}
+const guest2Id: GuestId = {
+  kind: 'GuestId',
+  value: '2',
+}
+const guest3Id: GuestId = {
+  kind: 'GuestId',
+  value: '3',
+}
 
 // === MENU ITEMS (Restaurant 1) ===
 const menuItem1Id: MenuItemId = `${restaurant1Id}.1`
@@ -42,6 +63,7 @@ const menuItem1: MenuItem = {
   photoPathinfo: '/images/margherita.jpg',
   price: 12.99,
   portionSize: 2,
+  customizations: [],
   available: true,
   menuTagIds: [menuTag1Id],
   createdAt: new Date('2023-01-01T10:00:00Z'),
@@ -51,9 +73,10 @@ const menuItem2: MenuItem = {
   id: menuItem2Id,
   name: 'Caesar Salad',
   description: 'Crisp romaine lettuce with Caesar dressing and croutons',
-  photoPathinfo: '/images/caesar_salad.jpg',
+  photoPathinfo: undefined,
   price: 8.99,
   portionSize: 1,
+  customizations: [],
   available: true,
   menuTagIds: [menuTag2Id],
   createdAt: new Date('2023-01-02T11:00:00Z'),
@@ -66,6 +89,7 @@ const menuItem3: MenuItem = {
   photoPathinfo: '/images/carbonara.jpg',
   price: 14.5,
   portionSize: 1,
+  customizations: [],
   available: true,
   menuTagIds: [menuTag3Id],
   createdAt: new Date('2023-01-03T11:30:00Z'),
@@ -78,6 +102,7 @@ const menuItem4: MenuItem = {
   photoPathinfo: '/images/tiramisu.jpg',
   price: 6.5,
   portionSize: 1,
+  customizations: [],
   available: true,
   menuTagIds: [menuTag1Id, menuTag2Id],
   createdAt: new Date('2023-01-04T12:00:00Z'),
@@ -99,6 +124,7 @@ const menuItem5: MenuItem = {
   photoPathinfo: '/images/sushi_platter.jpg',
   price: 22.0,
   portionSize: 2,
+  customizations: [],
   available: true,
   menuTagIds: [menuTag4Id, menuTag5Id],
   createdAt: new Date('2023-02-01T10:00:00Z'),
@@ -111,6 +137,7 @@ const menuItem6: MenuItem = {
   photoPathinfo: '/images/miso_soup.jpg',
   price: 4.99,
   portionSize: 1,
+  customizations: [],
   available: true,
   menuTagIds: [menuTag6Id],
   createdAt: new Date('2023-02-02T10:00:00Z'),
@@ -123,6 +150,7 @@ const menuItem7: MenuItem = {
   photoPathinfo: '/images/tempura_shrimp.jpg',
   price: 12.5,
   portionSize: 1,
+  customizations: [],
   available: true,
   menuTagIds: [],
   createdAt: new Date('2023-02-03T11:00:00Z'),
@@ -139,6 +167,7 @@ const menuItem8: MenuItem = {
   photoPathinfo: '/images/cheeseburger.jpg',
   price: 10.99,
   portionSize: 1,
+  customizations: [],
   available: true,
   menuTagIds: [],
   createdAt: new Date('2023-03-01T10:00:00Z'),
@@ -151,6 +180,7 @@ const menuItem9: MenuItem = {
   photoPathinfo: '/images/french_fries.jpg',
   price: 3.99,
   portionSize: 1,
+  customizations: [],
   available: true,
   menuTagIds: [],
   createdAt: new Date('2023-03-02T11:00:00Z'),
@@ -166,38 +196,45 @@ const tab1: Tab = {
   id: tab1Id,
   restaurantId: restaurant1Id,
   createdAt: new Date('2025-11-01T12:30:00Z'),
-  orders: [
-    {
-      id: `${tab1Id}.1`,
-      sentAt: new Date('2025-11-01T12:35:00Z'),
-      items: [
-        {
-          id: `${tab1Id}.1.1`,
-          quantity: 2,
-          ownerIds: [guest1Id],
-          menuItemId: menuItem1Id,
-        },
-        {
-          id: `${tab1Id}.1.2`,
-          quantity: 1,
-          ownerIds: [customer1Id],
-          menuItemId: menuItem2Id,
-        },
-      ],
-    },
-    {
-      id: `${tab1Id}.2`,
-      sentAt: new Date('2025-11-01T13:00:00Z'),
-      items: [
-        {
-          id: `${tab1Id}.2.1`,
-          quantity: 3,
-          ownerIds: [guest1Id, customer1Id, guest2Id, customer2Id],
-          menuItemId: menuItem3Id,
-        },
-      ],
-    },
-  ],
+  // orders: [
+  //   {
+  //     id: `${tab1Id}.1`,
+  //     sentAt: new Date('2025-11-01T12:35:00Z'),
+  //     items: [
+  //       {
+  //         id: `${tab1Id}.1.1`,
+  //         quantity: 2,
+  //         ownerIds: [guest1Id],
+  //         menuItemId: menuItem1Id,
+  //         price: menuItem1.price * 2,
+  //         customizations: new Map(),
+  //       },
+  //       {
+  //         id: `${tab1Id}.1.2`,
+  //         quantity: 1,
+  //         ownerIds: [customer1Id],
+  //         menuItemId: menuItem2Id,
+  //         price: menuItem2.price * 1,
+  //         customizations: new Map(),
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: `${tab1Id}.2`,
+  //     sentAt: new Date('2025-11-01T13:00:00Z'),
+  //     items: [
+  //       {
+  //         id: `${tab1Id}.2.1`,
+  //         quantity: 3,
+  //         ownerIds: [guest1Id, customer1Id, guest2Id, customer2Id],
+  //         menuItemId: menuItem3Id,
+  //         price: menuItem3.price * 3,
+  //         customizations: new Map(),
+  //       },
+  //     ],
+  //   },
+  // ],
+  orders: [],
 }
 
 // Tab for restaurant 2
@@ -215,12 +252,16 @@ const tab2: Tab = {
           quantity: 1,
           ownerIds: [guest2Id, customer3Id],
           menuItemId: menuItem5Id,
+          price: menuItem5.price * 1,
+          customizations: new Map(),
         },
         {
           id: `${tab2Id}.1.2`,
           quantity: 2,
           ownerIds: [guest2Id, customer3Id, guest3Id, customer4Id],
           menuItemId: menuItem6Id,
+          price: menuItem6.price * 2,
+          customizations: new Map(),
         },
       ],
     },
@@ -242,12 +283,16 @@ const tab3: Tab = {
           quantity: 2,
           ownerIds: [guest1Id, customer4Id],
           menuItemId: menuItem8Id,
+          price: menuItem8.price * 2,
+          customizations: new Map(),
         },
         {
           id: `${tab3Id}.1.2`,
           quantity: 1,
           ownerIds: [customer4Id],
           menuItemId: menuItem9Id,
+          price: menuItem9.price * 1,
+          customizations: new Map(),
         },
       ],
     },
@@ -277,7 +322,7 @@ export const restaurants: Map<RestaurantId, Restaurant> = new Map<
     {
       id: restaurant1Id,
       name: 'La Tavola Italiana',
-      photoPathinfo: '/images/restaurants/la_tavola.jpg',
+      photoPathinfo: '/images/restaurants/la_tavola.avif',
       address: '123 Via Roma, Florence, Italy',
     },
   ],
@@ -309,6 +354,11 @@ export const restaurantMenu = new Map<RestaurantId, Map<MenuItemId, MenuItem>>([
       [menuItem2.id, menuItem2],
       [menuItem3.id, menuItem3],
       [menuItem4.id, menuItem4],
+      [menuItem5.id, menuItem5],
+      [menuItem6.id, menuItem6],
+      [menuItem7.id, menuItem7],
+      [menuItem8.id, menuItem8],
+      [menuItem9.id, menuItem9],
     ]),
   ],
   [
