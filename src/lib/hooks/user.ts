@@ -9,7 +9,9 @@ function makeCustomerQueryOptions(id: CustomerId) {
   return {
     queryKey: ['user', id],
     queryFn: () =>
-      fetch(`/api/users/${id}`).then((res) => res.json() as Promise<User>),
+      fetch(`/api/users/${id}`).then(
+        (res) => res.json() as Promise<Pick<User, 'fullName' | 'imageUrl'>>,
+      ),
   }
 }
 

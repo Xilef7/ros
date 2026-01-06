@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { clerkClient } from '@clerk/nextjs/server'
 
 export async function GET(
@@ -11,5 +11,8 @@ export async function GET(
 
   const user = await client.users.getUser(userId)
 
-  return user
+  return NextResponse.json({
+    fullName: user.fullName,
+    imageUrl: user.imageUrl,
+  })
 }
