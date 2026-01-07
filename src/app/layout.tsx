@@ -37,9 +37,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-orange-50 flex flex-col min-h-screen items-center pb-16`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-orange-50 flex flex-col min-h-dvh items-center pb-16`}
       >
-        <Suspense>
+        <Suspense
+          fallback={
+            <header className="sticky z-10 top-0 w-screen gap-2 p-2 px-4 flex flex-row items-center border-b bg-orange-50 shadow-lg">
+              <Link href="/" className="text-lg font-extrabold text-primary">
+                ROS
+              </Link>
+            </header>
+          }
+        >
           <Providers>
             <header className="sticky z-10 top-0 w-screen gap-2 p-2 px-4 flex flex-row items-center border-b bg-orange-50 shadow-lg">
               <Link href="/" className="text-lg font-extrabold text-primary">

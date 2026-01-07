@@ -108,7 +108,16 @@ export default function TabSummary({
   }).format
 
   const cover = (
-    <Cover photoPathinfo={restaurant.photoPathinfo} name={restaurant.name} />
+    <Cover photoPathinfo={restaurant.photoPathinfo} name={restaurant.name}>
+      <div className="flex flex-col">
+        <span className="text-white text-xl font-semibold">
+          {restaurant.name}
+        </span>
+        <div className="text-gray-300 text-base font-medium">
+          {restaurant.address}
+        </div>
+      </div>
+    </Cover>
   )
 
   return (

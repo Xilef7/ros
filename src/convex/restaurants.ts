@@ -1,4 +1,7 @@
 import { ConvexError, v } from 'convex/values'
+import { query, QueryCtx } from './_generated/server'
+import { Id } from './_generated/dataModel'
+import { paginationOptsValidator } from 'convex/server'
 
 async function tryCatch<T>(fn: () => Promise<T>) {
   try {
@@ -7,9 +10,6 @@ async function tryCatch<T>(fn: () => Promise<T>) {
     return { error: error instanceof ConvexError ? error.data : error }
   }
 }
-import { query, QueryCtx } from './_generated/server'
-import { Id } from './_generated/dataModel'
-import { paginationOptsValidator } from 'convex/server'
 
 export const list = query({
   args: { paginationOpts: paginationOptsValidator },

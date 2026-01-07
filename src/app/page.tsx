@@ -5,7 +5,7 @@ import { ScanIcon, UtensilsIcon } from 'lucide-react'
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-4 items-stretch justify-center min-h-screen p-4">
+    <div className="flex flex-col gap-4 items-stretch justify-center flex-1 p-4">
       <Button size="xl" asChild>
         <Link href="/scanner">
           <ScanIcon /> Scan QR Code

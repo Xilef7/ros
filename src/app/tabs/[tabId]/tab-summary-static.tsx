@@ -60,10 +60,16 @@ export default async function TabSummary({
   return (
     <>
       <Link href={`/restaurants/${restaurant._id}`} className="self-stretch">
-        <Cover
-          photoPathinfo={restaurant.photoPathinfo}
-          name={restaurant.name}
-        />
+        <Cover photoPathinfo={restaurant.photoPathinfo} name={restaurant.name}>
+          <div className="flex flex-col">
+            <span className="text-white text-xl font-semibold">
+              {restaurant.name}
+            </span>
+            <div className="text-gray-300 text-base font-medium">
+              {restaurant.address}
+            </div>
+          </div>
+        </Cover>
       </Link>
       <div className="p-2 self-stretch">
         <div className="bg-neutral-50 border border-muted-foreground rounded-lg p-5 my-3">
