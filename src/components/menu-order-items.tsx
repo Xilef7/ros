@@ -22,6 +22,10 @@ import {
 import { Doc } from '@/convex/_generated/dataModel'
 import CustomizationsConfigurator from './customizations-configurator'
 import { useMyOwnerId } from '@/lib/hooks/user'
+import OwnerAvatar from './user-avatar-client'
+import OwnerStack from './owner-stack'
+import UserAvatar from './user-avatar'
+import { Avatar, AvatarFallback } from './ui/avatar'
 
 export default function MenuOrderItems({
   menuItem,
@@ -36,6 +40,12 @@ export default function MenuOrderItems({
   const orderItems = useCurrentOrderByMenuItemId(menuItemId)
 
   const { myOwnerId } = useMyOwnerId()
+
+  const allOwnerIds = new Set(
+    orderItems.flatMap((orderItem) => orderItem.ownerIds),
+  )
+  const hasOrdered = myOwnerId && allOwnerIds.has(myOwnerId)
+  const othersCount = allOwnerIds.size - (hasOrdered ? 1 : 0)
 
   const handleAddOrderItem = useAddOrderItemMutation()
 
@@ -81,61 +91,71 @@ export default function MenuOrderItems({
   )
 
   return (
-    <Drawer>
-      {orderItems.length > 0 ? (
-        <DrawerTrigger asChild>
-          <Button
-            variant="default"
-            vibe="friendly"
-            className="min-w-30"
-            aria-label="Open order items drawer"
-          >
-            {orderItems.length} item{orderItems.length > 1 && 's'}
-          </Button>
-        </DrawerTrigger>
-      ) : customizations.length > 0 ? (
-        <CustomizationsConfigurator
-          menuItem={menuItem}
-          trigger={renderAddOrderItemButton(true)}
-        />
-      ) : (
-        renderAddOrderItemButton(false)
-      )}
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>{name}</DrawerTitle>
-          <DrawerDescription>{description}</DrawerDescription>
-        </DrawerHeader>
-
-        {orderItems.length > 0 ? (
-          <ItemGroup ref={orderListRef} className="overflow-y-auto">
-            {orderItems.map((orderItem) => (
-              <MenuOrderItem
-                key={orderItem.id}
-                orderItem={orderItem}
-                menuItem={menuItem}
-              />
-            ))}
-          </ItemGroup>
-        ) : (
-          <Empty>
-            <EmptyHeader>
-              <EmptyTitle>No orders yet</EmptyTitle>
-            </EmptyHeader>
-          </Empty>
+    <>
+      <OwnerStack>
+        {hasOrdered && <OwnerAvatar id={myOwnerId} />}
+        {othersCount > 0 && (
+          <Avatar>
+            <AvatarFallback>+{othersCount}</AvatarFallback>
+          </Avatar>
         )}
+      </OwnerStack>
+      <Drawer>
+        {orderItems.length > 0 ? (
+          <DrawerTrigger asChild>
+            <Button
+              variant="default"
+              vibe="friendly"
+              className="min-w-30"
+              aria-label="Open order items drawer"
+            >
+              {orderItems.length} item{orderItems.length > 1 && 's'}
+            </Button>
+          </DrawerTrigger>
+        ) : customizations.length > 0 ? (
+          <CustomizationsConfigurator
+            menuItem={menuItem}
+            trigger={renderAddOrderItemButton(true)}
+          />
+        ) : (
+          renderAddOrderItemButton(false)
+        )}
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>{name}</DrawerTitle>
+            <DrawerDescription>{description}</DrawerDescription>
+          </DrawerHeader>
 
-        <DrawerFooter>
-          {customizations.length > 0 ? (
-            <CustomizationsConfigurator
-              menuItem={menuItem}
-              trigger={renderAddAnotherButton(true)}
-            />
+          {orderItems.length > 0 ? (
+            <ItemGroup ref={orderListRef} className="overflow-y-auto">
+              {orderItems.map((orderItem) => (
+                <MenuOrderItem
+                  key={orderItem.id}
+                  orderItem={orderItem}
+                  menuItem={menuItem}
+                />
+              ))}
+            </ItemGroup>
           ) : (
-            renderAddAnotherButton(false)
+            <Empty>
+              <EmptyHeader>
+                <EmptyTitle>No orders yet</EmptyTitle>
+              </EmptyHeader>
+            </Empty>
           )}
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+
+          <DrawerFooter>
+            {customizations.length > 0 ? (
+              <CustomizationsConfigurator
+                menuItem={menuItem}
+                trigger={renderAddAnotherButton(true)}
+              />
+            ) : (
+              renderAddAnotherButton(false)
+            )}
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    </>
   )
 }
