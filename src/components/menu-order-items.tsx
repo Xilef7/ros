@@ -24,7 +24,6 @@ import CustomizationsConfigurator from './customizations-configurator'
 import { useMyOwnerId } from '@/lib/hooks/user'
 import OwnerAvatar from './user-avatar-client'
 import OwnerStack from './owner-stack'
-import UserAvatar from './user-avatar'
 import { Avatar, AvatarFallback } from './ui/avatar'
 
 export default function MenuOrderItems({
@@ -46,6 +45,10 @@ export default function MenuOrderItems({
   )
   const hasOrdered = myOwnerId && allOwnerIds.has(myOwnerId)
   const othersCount = allOwnerIds.size - (hasOrdered ? 1 : 0)
+  const itemsCount = orderItems.reduce(
+    (sum, orderItem) => sum + orderItem.quantity,
+    0,
+  )
 
   const handleAddOrderItem = useAddOrderItemMutation()
 
@@ -86,7 +89,7 @@ export default function MenuOrderItems({
       aria-label="Add to order"
       disabled={!myOwnerId}
     >
-      {orderItems.length > 0 ? 'Add another' : 'Add to Order'}
+      {orderItems.length > 0 ? 'Add Another' : 'Add to Order'}
     </Button>
   )
 
@@ -109,7 +112,7 @@ export default function MenuOrderItems({
               className="min-w-30"
               aria-label="Open order items drawer"
             >
-              {orderItems.length} item{orderItems.length > 1 && 's'}
+              {itemsCount} item{itemsCount > 1 && 's'}
             </Button>
           </DrawerTrigger>
         ) : customizations.length > 0 ? (

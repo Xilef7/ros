@@ -208,10 +208,10 @@ export default function PreparedCustomizationsConfigurator({
                   handleAddOrderItem(menuItemId, selectedCustomizations)
                 }
                 vibe="friendly"
-                aria-label="Add to order"
+                aria-label="Save to order"
                 disabled={hasInvalidCustomization}
               >
-                {`Add to Order (${formattedPrice})`}
+                {`Save to Order (${formattedPrice})`}
               </Button>
             )}
           </SheetClose>

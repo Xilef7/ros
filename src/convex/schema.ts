@@ -70,14 +70,18 @@ export default defineSchema({
     name: v.string(),
     photoPathinfo: v.optional(v.string()),
     address: v.string(),
-    openTime: v.object({
-      hour: v.number(),
-      minute: v.number(),
-    }),
-    closeTime: v.object({
-      hour: v.number(),
-      minute: v.number(),
-    }),
+    openTime: v.optional(
+      v.object({
+        hour: v.number(),
+        minute: v.number(),
+      }),
+    ),
+    closeTime: v.optional(
+      v.object({
+        hour: v.number(),
+        minute: v.number(),
+      }),
+    ),
     menu: v.array(v.id('menuItems')),
   }),
 })

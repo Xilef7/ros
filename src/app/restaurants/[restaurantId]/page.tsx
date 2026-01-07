@@ -7,7 +7,7 @@ import MenuBrowser from './menu-browser'
 import { ButtonGroup } from '@/components/ui/button-group'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { NotepadTextDashedIcon, PlusIcon } from 'lucide-react'
+import { NotepadTextDashedIcon } from 'lucide-react'
 import CreateTabButton from './CreateTab'
 
 export default async function Page({
@@ -56,7 +56,7 @@ export default async function Page({
         >
           <Link href="order/current">
             <NotepadTextDashedIcon />
-            Check Order
+            Check Saved Order
           </Link>
         </Button>
       </ButtonGroup>

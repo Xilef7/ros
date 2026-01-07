@@ -92,7 +92,7 @@ function GuestPickerLoaded({
           </>
         )}
       </AlertDialogTrigger>
-      <AlertDialogContent className="max-h-[50vh] overflow-hidden flex flex-col">
+      <AlertDialogContent className="max-h-[50vh] overflow-hidden flex flex-col items-center">
         <AlertDialogHeader>
           <AlertDialogTitle>Who are You?</AlertDialogTitle>
           <AlertDialogDescription>
@@ -116,6 +116,7 @@ function GuestPickerLoaded({
                     tabId,
                     guestName: newGuestName,
                   })
+                  console.log(newGuestId)
                   setNewGuestName('')
                   setGuestId(newGuestId)
                 }}

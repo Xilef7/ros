@@ -188,16 +188,17 @@ export const addGuest = mutation({
     }
 
     const guestSequenceId = tab.guestSequenceId + 1
+    const guestId = `${args.tabId}.${guestSequenceId}`
 
     await ctx.db.patch(args.tabId, {
       guestSequenceId,
       guestNames: {
         ...tab.guestNames,
-        [`${args.tabId}.${guestSequenceId}}`]: args.guestName,
+        [guestId]: args.guestName,
       },
     })
 
-    return guestSequenceId.toString()
+    return guestId
   },
 })
 

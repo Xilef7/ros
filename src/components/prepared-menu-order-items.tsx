@@ -44,10 +44,10 @@ export default function PreparedMenuOrderItems({
       onClick={asTrigger ? undefined : () => handleAddOrderItem(menuItemId)}
       variant="outlineColored"
       vibe="friendly"
-      className="min-w-30"
-      aria-label="Add to order"
+      className="min-w-32"
+      aria-label="Save to order"
     >
-      Add to Order
+      Save to Order
     </Button>
   )
 
@@ -64,9 +64,9 @@ export default function PreparedMenuOrderItems({
     <Button
       onClick={asTrigger ? undefined : () => handleAddAnother(menuItem._id)}
       vibe="friendly"
-      aria-label="Add to order"
+      aria-label="Save to order"
     >
-      {orderItems.length > 0 ? 'Add another' : 'Add to Order'}
+      {orderItems.length > 0 ? 'Save Another' : 'Save to Order'}
     </Button>
   )
 
@@ -77,7 +77,7 @@ export default function PreparedMenuOrderItems({
           <Button
             variant="default"
             vibe="friendly"
-            className="min-w-30"
+            className="min-w-32"
             aria-label="Open order items drawer"
           >
             {orderItems.length} item{orderItems.length > 1 && 's'}
