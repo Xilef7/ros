@@ -35,8 +35,11 @@ export default function PreparedOrderItems({
           const menuItem = menu[menuItemId]
           if (menuItem) {
             totalPrice +=
-              (calculateOrderItemPrice(menuItem, customizations) * quantity) /
-              ownerCount
+              ownerCount > 0
+                ? (calculateOrderItemPrice(menuItem, customizations) *
+                    quantity) /
+                  ownerCount
+                : NaN
           }
           return totalPrice
         },
@@ -54,7 +57,7 @@ export default function PreparedOrderItems({
           <span className="font-medium text-base align-middle mx-3">
             Total:{' '}
             <span className="font-semibold text-lg text-primary">
-              {formatPrice(totalPrice)}
+              {isNaN(totalPrice) ? '?' : formatPrice(totalPrice)}
             </span>
           </span>
         )}
@@ -104,7 +107,7 @@ function OrderItem({
   const isShared = ownerCount !== 1
   const displayedPrice = menuItem
     ? (calculateOrderItemPrice(menuItem, customizations) * quantity) /
-      ownerCount
+      (ownerCount || 1)
     : undefined
 
   return (
@@ -141,7 +144,7 @@ function OrderItem({
             ) : (
               <Skeleton className="h-6 w-[100px]" />
             )}
-            {isShared && ` / ${ownerCount}`}
+            {isShared && ` / ${ownerCount || '?'}`}
           </div>
         </div>
       </ItemContent>

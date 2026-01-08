@@ -176,6 +176,62 @@ export function useLocalQuantityMutations() {
   }
 }
 
+export function useLocalOwnerCountMutations() {
+  const restaurantId = useCurrentRestaurantId()
+  const key = `${restaurantId}:prepared_orders`
+
+  return {
+    incrementOwnerCount: (id: LocalOrderItemId) => {
+      const preparedOrders = new Map(
+        JSON.parse(localStorage.getItem(key) ?? '[]') as [
+          LocalOrderItemId,
+          LocalOrderItem,
+        ][],
+      )
+
+      const order = preparedOrders.get(id)
+      if (order) {
+        order.ownerCount++
+
+        localStorage.setItem(
+          key,
+          JSON.stringify(preparedOrders.entries().toArray()),
+        )
+        window.dispatchEvent(
+          new StorageEvent('storage', {
+            key,
+            storageArea: localStorage,
+          }),
+        )
+      }
+    },
+    decrementOwnerCount: (id: LocalOrderItemId) => {
+      const preparedOrders = new Map(
+        JSON.parse(localStorage.getItem(key) ?? '[]') as [
+          LocalOrderItemId,
+          LocalOrderItem,
+        ][],
+      )
+
+      const order = preparedOrders.get(id)
+      if (order && order.ownerCount > 1) {
+        order.ownerCount--
+
+        localStorage.setItem(
+          key,
+          JSON.stringify(preparedOrders.entries().toArray()),
+        )
+        window.dispatchEvent(
+          new StorageEvent('storage', {
+            key,
+            storageArea: localStorage,
+          }),
+        )
+      }
+    },
+  }
+}
+
 export function useLocalCustomizationsMutation() {
   const restaurantId = useCurrentRestaurantId()
   const key = `${restaurantId}:prepared_orders`

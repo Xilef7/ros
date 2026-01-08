@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { api } from '@/convex/_generated/api'
 import { usePaginatedQuery } from 'convex/react'
-import { ImageOffIcon } from 'lucide-react'
+import { AsteriskIcon, ImageOffIcon } from 'lucide-react'
 import {
   Item,
   ItemActions,
@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/item'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
+import { Separator } from '@/components/ui/separator'
 
 export default function RestaurantsPage() {
   const { results, status, loadMore } = usePaginatedQuery(
@@ -45,8 +46,8 @@ export default function RestaurantsPage() {
   }, [status, loadMore])
 
   return (
-    <main className="self-stretch p-4">
-      <h1 className="text-2xl font-semibold">Browse Restaurants</h1>
+    <main className="flex flex-col self-stretch p-4 items-stretch">
+      <h1 className="text-2xl font-semibold w-full">Browse Restaurants</h1>
 
       <ItemGroup className="my-4 gap-4">
         {results.map((restaurant) => (
@@ -79,9 +80,18 @@ export default function RestaurantsPage() {
       </ItemGroup>
 
       <div ref={loadMoreRef} style={{ height: 1 }} />
-
-      {status === 'LoadingMore' && <Spinner />}
-      {status === 'Exhausted' && <div>No more restaurants</div>}
+      {(status === 'LoadingFirstPage' || status === 'LoadingMore') && (
+        <Spinner className="size-16 self-center" />
+      )}
+      {status === 'Exhausted' && (
+        <span className="flex items-center">
+          <Separator className="flex-1 mr-2" decorative />
+          {Array.from({ length: 3 }).map((_, index) => (
+            <AsteriskIcon key={index} className="size-4" />
+          ))}
+          <Separator className="flex-1 ml-2" decorative />
+        </span>
+      )}
     </main>
   )
 }

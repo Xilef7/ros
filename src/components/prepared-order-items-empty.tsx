@@ -26,7 +26,7 @@ export default function PreparedOrderEmptyItems({
         <EmptyDescription>
           You have not prepared any orders yet.
           <br />
-          See restaurant menu to start ordering.
+          See restaurant menu to save order.
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>

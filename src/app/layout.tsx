@@ -13,6 +13,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import GuestPicker from './GuestPicker'
 import { Suspense } from 'react'
+import { Spinner } from '@/components/ui/spinner'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,15 +40,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-orange-50 flex flex-col min-h-dvh items-center pb-16`}
       >
-        <Suspense
-          fallback={
-            <header className="sticky z-10 top-0 w-screen gap-2 p-2 px-4 flex flex-row items-center border-b bg-orange-50 shadow-lg">
-              <Link href="/" className="text-lg font-extrabold text-primary">
-                ROS
-              </Link>
-            </header>
-          }
-        >
+        <Suspense fallback={<Spinner className="h-dvh" />}>
           <Providers>
             <header className="sticky z-10 top-0 w-screen gap-2 p-2 px-4 flex flex-row items-center border-b bg-orange-50 shadow-lg">
               <Link href="/" className="text-lg font-extrabold text-primary">
