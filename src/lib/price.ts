@@ -22,23 +22,33 @@ export function calculateOrderItemPrice(
   return price
 }
 
-export function calculateFinalPrice(basePrice: number, fee: Fee): number {
-  const recursedPrice =
-    basePrice + basePrice * (fee.linearValue ?? 0) + (fee.constantValue ?? 0)
+export function calculateFee(basePrice: number, fee: Fee): number {
+  const feeValue = basePrice * (fee.linearValue ?? 0) + (fee.constantValue ?? 0)
   const recursiveFeeValue =
     fee.recursiveFees?.reduce(
-      (sum, fee) => sum + calculateFinalPrice(recursedPrice, fee),
+      (sum, recursiveFee) =>
+        sum + calculateFee(basePrice + feeValue, recursiveFee),
       0,
     ) ?? 0
-  return recursedPrice + recursiveFeeValue
+  return feeValue + recursiveFeeValue
 }
 
 export const defaultFee: Fee = {
-  linearValue: 0.1, // service
-  recursiveFees: [{ linearValue: 0.11 }],
+  name: 'service',
+  linearValue: 0.1,
+  recursiveFees: [
+    {
+      name: 'tax',
+      linearValue: 0.11,
+    },
+  ],
 }
 
 export const formatPrice = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
 }).format
+
+export const formatFee = (fee: Fee): string =>
+  `${fee.name} ${[fee.linearValue && new Intl.NumberFormat('en-US', { style: 'percent' }).format(fee.linearValue), fee.constantValue && formatPrice(fee.constantValue)].filter((value) => value).join(' + ')}` +
+  (fee.recursiveFees ?? []).map((fee) => ', ' + formatFee(fee)).join('')

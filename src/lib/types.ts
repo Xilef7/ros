@@ -113,6 +113,7 @@ export type MenuTag = {
 }
 
 export type Fee = {
+  name: string
   linearValue?: number
   constantValue?: number
   recursiveFees?: Array<Fee>

@@ -15,7 +15,7 @@ import {
   convertStrToDbOwnerId,
   OwnerId,
 } from '@/lib/types'
-import { calculateFinalPrice, defaultFee, formatPrice } from '@/lib/price'
+import { calculateFee, defaultFee, formatFee, formatPrice } from '@/lib/price'
 import { useTabMenu } from '@/lib/hooks/convex'
 import { Checkbox } from '@/components/ui/checkbox'
 import CloseTabButton from './CloseTabButton'
@@ -82,7 +82,8 @@ export default function TabSummary({
       }
     }
   }
-  const totalPrice = calculateFinalPrice(subTotalPrice, defaultFee)
+  const totalPrice = subTotalPrice + calculateFee(subTotalPrice, defaultFee)
+  const formattedFee = formatFee(defaultFee)
 
   const sortedOrderItemsByOwnerId = orderItemsByOwnerId
     .entries()
@@ -136,6 +137,11 @@ export default function TabSummary({
             <span className="font-semibold text-primary">
               {formatPrice(totalPrice)}
             </span>
+            {formattedFee && (
+              <span className="font-medium text-muted-foreground text-sm">
+                {` (${formattedFee})`}
+              </span>
+            )}
           </span>
 
           <div className="text-sm text-gray-500">

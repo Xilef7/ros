@@ -4,7 +4,7 @@ import { Doc, Id } from '@/convex/_generated/dataModel'
 import OwnerOrderItemsSent from '@/components/owner-order-items-sent'
 import { convertDbToStrOwnerId, CustomerId, OwnerId } from '@/lib/types'
 import { auth } from '@clerk/nextjs/server'
-import { calculateFinalPrice, defaultFee, formatPrice } from '@/lib/price'
+import { calculateFee, defaultFee, formatFee, formatPrice } from '@/lib/price'
 import OwnerOrderEmptyItems from '@/components/owner-order-items-empty'
 import { OwnerName, PossessiveOwnerName } from '@/components/name-server'
 import OwnerAvatar from '@/components/user-avatar-server'
@@ -42,7 +42,8 @@ export default async function TabSummary({
       }
     }
   }
-  totalPrice = calculateFinalPrice(totalPrice, defaultFee)
+  totalPrice += calculateFee(totalPrice, defaultFee)
+  const formattedFee = formatFee(defaultFee)
 
   const sortedOrderItemsByOwnerId = orderItemsByOwnerId
     .entries()
@@ -78,6 +79,11 @@ export default async function TabSummary({
             <span className="font-semibold text-primary">
               {formatPrice(totalPrice)}
             </span>
+            {formattedFee && (
+              <span className="font-medium text-muted-foreground text-sm">
+                {` (${formattedFee})`}
+              </span>
+            )}
           </span>
 
           <p className="text-sm text-gray-500">
