@@ -126,7 +126,7 @@ function OrderItem({
       <ItemContent>
         <ItemTitle className="text-base font-semibold">
           {menuItem ? menuItem.name : <Skeleton className="h-6 w-[100px]" />}{' '}
-          <XIcon size={12} /> {quantity}
+          <XIcon size={12} /> {quantity / (isShared ? 1 : ownerIds.length)}
           {isShared && <Badge>Shared</Badge>}
         </ItemTitle>
         <ItemDescription className="line-clamp-none">
