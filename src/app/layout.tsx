@@ -60,7 +60,7 @@ export default function RootLayout({
                 <UserButton />
               </SignedIn>
             </header>
-            <div className="w-full max-w-xl flex flex-col items-center pb-16">
+            <div className="w-full max-w-xl flex-1 flex flex-col items-center pb-16">
               {children}
             </div>
           </Providers>
