@@ -57,7 +57,7 @@ export default function RootLayout({
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
-                <UserButton />
+                <UserButton showName />
               </SignedIn>
             </header>
             <div className="w-full max-w-xl flex-1 flex flex-col items-center pb-16">
