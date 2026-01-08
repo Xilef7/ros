@@ -36,6 +36,7 @@ export function calculateFee(basePrice: number, fee: Fee): number {
 export const defaultFee: Fee = {
   name: 'service',
   linearValue: 0.1,
+  constantValue: 1,
   recursiveFees: [
     {
       name: 'tax',
@@ -50,5 +51,18 @@ export const formatPrice = new Intl.NumberFormat('en-US', {
 }).format
 
 export const formatFee = (fee: Fee): string =>
-  `${fee.name} ${[fee.linearValue && new Intl.NumberFormat('en-US', { style: 'percent' }).format(fee.linearValue), fee.constantValue && formatPrice(fee.constantValue)].filter((value) => value).join(' + ')}` +
+  `${fee.name} ${[
+    fee.linearValue &&
+      new Intl.NumberFormat('en-US', {
+        style: 'percent',
+      }).format(fee.linearValue),
+    fee.constantValue &&
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+      }).format(fee.constantValue),
+  ]
+    .filter((value) => value)
+    .join(' + ')}` +
   (fee.recursiveFees ?? []).map((fee) => ', ' + formatFee(fee)).join('')
