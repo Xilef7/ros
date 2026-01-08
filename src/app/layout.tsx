@@ -42,7 +42,7 @@ export default function RootLayout({
       >
         <Suspense fallback={<Spinner className="h-dvh" />}>
           <Providers>
-            <header className="sticky z-10 top-0 w-full gap-2 p-2 px-4 flex flex-row items-center border-b bg-orange-50 shadow-lg">
+            <header className="sticky z-10 top-0 w-full gap-2 p-2 px-4 h-13 flex flex-row items-center border-b bg-orange-50 shadow-lg">
               <Link href="/" className="text-lg font-extrabold text-primary">
                 ROS
               </Link>
