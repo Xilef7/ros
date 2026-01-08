@@ -69,7 +69,7 @@ export default function CurrentOrderPage() {
         ))}
       </main>
 
-      <ButtonGroup className="fixed bottom-0 w-screen z-10 p-2 pb-4">
+      <ButtonGroup className="fixed bottom-0 w-full z-10 p-2 pb-4">
         <Button
           onClick={() => {
             startTransition(async () => {
