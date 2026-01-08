@@ -64,9 +64,9 @@ export default function PreparedMenuOrderItems({
     <Button
       onClick={asTrigger ? undefined : () => handleAddAnother(menuItem._id)}
       vibe="friendly"
-      aria-label="Save to order"
+      aria-label="Add another"
     >
-      {orderItems.length > 0 ? 'Save Another' : 'Save to Order'}
+      {orderItems.length > 0 ? 'Add Another' : 'Save to Order'}
     </Button>
   )
 

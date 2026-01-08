@@ -184,11 +184,13 @@ export default function TabSummary({
                   disabled={!tab.closedAt || paidOwnerIds.includes(ownerId)}
                 />
               }
-              renderName={(ownerId) => <OwnerName id={ownerId} />}
+              renderName={(ownerId) => <OwnerName key={ownerId} id={ownerId} />}
               renderPossessiveName={(ownerId) => (
-                <PossessiveOwnerName id={ownerId} />
+                <PossessiveOwnerName key={ownerId} id={ownerId} />
               )}
-              renderAvatar={(ownerId) => <OwnerAvatar id={ownerId} />}
+              renderAvatar={(ownerId) => (
+                <OwnerAvatar key={ownerId} id={ownerId} />
+              )}
             />
           ))
         ) : (

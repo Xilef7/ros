@@ -81,7 +81,7 @@ export default function OwnerOrderItemsSent({
               key={orderItem.id}
               orderItem={orderItem}
               menuItem={menuItem}
-              renderName={renderName}
+              renderAvatar={renderAvatar}
               {...openTabIdOrRestaurantId}
             />
           </Fragment>
@@ -94,12 +94,12 @@ export default function OwnerOrderItemsSent({
 function OrderItem({
   orderItem: { id: orderItemId, price, quantity, customizations, ownerIds },
   menuItem,
-  renderName,
+  renderAvatar,
   ...openTabIdOrRestaurantId
 }: {
   orderItem: Doc<'tabs'>['orders'][number]['items'][number]
   menuItem: Pick<Doc<'menuItems'>, '_id' | 'name' | 'photoPathinfo'> | undefined
-  renderName: (ownerId: OwnerId) => ReactNode
+  renderAvatar: (ownerId: OwnerId) => ReactNode
 } & (
   | { isTabOpen: true; tabId: TabId; restaurantId?: RestaurantId }
   | { isTabOpen: false; restaurantId: RestaurantId; tabId?: TabId }
@@ -137,7 +137,7 @@ function OrderItem({
         {isShared && (
           <div className="flex flex-row items-center">
             <OwnerStack>
-              {ownerStringIds.map(renderName)}
+              {ownerStringIds.map(renderAvatar)}
               {isTabOpen && (
                 <OwnerUpdaterSent
                   orderItemId={orderItemId}

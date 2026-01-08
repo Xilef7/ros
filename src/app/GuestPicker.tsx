@@ -28,6 +28,12 @@ import { api } from '@/convex/_generated/api'
 import { useCurrentTabId } from '@/lib/hooks/params'
 import { useSelectedLayoutSegment } from 'next/navigation'
 import { useMyGuestId } from '@/lib/hooks/user'
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from '@/components/ui/empty'
 
 export default function GuestPickerWrapper() {
   const segment = useSelectedLayoutSegment()
@@ -116,10 +122,10 @@ function GuestPickerLoaded({
                     tabId,
                     guestName: newGuestName,
                   })
-                  console.log(newGuestId)
                   setNewGuestName('')
                   setGuestId(newGuestId)
                 }}
+                disabled={newGuestName === ''}
                 vibe="friendly"
                 size="icon"
               >
@@ -130,32 +136,43 @@ function GuestPickerLoaded({
         )}
         <ItemGroup className="overflow-y-auto flex-1">
           {tab ? (
-            Object.entries(tab.guestNames)
-              .sort(([, a], [, b]) => a.localeCompare(b))
-              .map(([guestIdValue, name]) => {
-                return (
-                  <Item
-                    key={guestIdValue}
-                    onClick={() => setGuestId(guestIdValue)}
-                    size="sm"
-                    variant={
-                      guestIdValue === myGuestIdValue ? 'outline' : 'default'
-                    }
-                  >
-                    <ItemMedia>
-                      <OwnerAvatar
-                        id={convertDbToStrOwnerId({
-                          kind: 'GuestId',
-                          value: guestIdValue,
-                        })}
-                      />
-                    </ItemMedia>
-                    <ItemContent>
-                      <ItemTitle>{name}</ItemTitle>
-                    </ItemContent>
-                  </Item>
-                )
-              })
+            Object.keys(tab.guestNames).length > 0 ? (
+              Object.entries(tab.guestNames)
+                .sort(([, a], [, b]) => a.localeCompare(b))
+                .map(([guestIdValue, name]) => {
+                  return (
+                    <Item
+                      key={guestIdValue}
+                      onClick={() => setGuestId(guestIdValue)}
+                      size="sm"
+                      variant={
+                        guestIdValue === myGuestIdValue ? 'outline' : 'default'
+                      }
+                    >
+                      <ItemMedia>
+                        <OwnerAvatar
+                          id={convertDbToStrOwnerId({
+                            kind: 'GuestId',
+                            value: guestIdValue,
+                          })}
+                        />
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{name}</ItemTitle>
+                      </ItemContent>
+                    </Item>
+                  )
+                })
+            ) : (
+              <Empty>
+                <EmptyHeader>
+                  <EmptyTitle>You are the first one here</EmptyTitle>
+                  <EmptyDescription>
+                    Add new guest name to start!
+                  </EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            )
           ) : (
             <Spinner />
           )}

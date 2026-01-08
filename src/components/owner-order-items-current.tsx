@@ -169,7 +169,10 @@ function OrderItem({
             {isShared && ` / ${ownerIds.length}`}
           </div>
           <ItemActions>
-            <QuantityUpdater orderItemId={orderItemId} quantity={quantity} />
+            <QuantityUpdater
+              orderItemId={orderItemId}
+              quantity={quantity / (isShared ? 1 : ownerIds.length)}
+            />
           </ItemActions>
         </div>
       </ItemContent>

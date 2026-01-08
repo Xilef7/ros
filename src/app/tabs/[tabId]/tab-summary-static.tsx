@@ -101,11 +101,13 @@ export default async function TabSummary({
               menu={menuItems}
               isTabOpen={false}
               restaurantId={tab.restaurantId}
-              renderName={(ownerId) => <OwnerName id={ownerId} />}
+              renderName={(ownerId) => <OwnerName key={ownerId} id={ownerId} />}
               renderPossessiveName={(ownerId) => (
-                <PossessiveOwnerName id={ownerId} />
+                <PossessiveOwnerName key={ownerId} id={ownerId} />
               )}
-              renderAvatar={(ownerId) => <OwnerAvatar id={ownerId} />}
+              renderAvatar={(ownerId) => (
+                <OwnerAvatar key={ownerId} id={ownerId} />
+              )}
             />
           ))
         ) : (
