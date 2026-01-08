@@ -7,8 +7,9 @@ import { api } from '@/convex/_generated/api'
 
 export const getCustomer = cache(async (id: CustomerId) => {
   const client = await clerkClient()
+  const [, customerId] = id.split('.')
 
-  const user = await client.users.getUser(id)
+  const user = await client.users.getUser(customerId)
 
   return user
 })

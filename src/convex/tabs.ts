@@ -56,8 +56,15 @@ export const get = query({
 
       const menuItems = await getAvailableMenuItems(ctx, tab.restaurantId)
 
+      const visitations = await ctx.db
+        .query('tabVisitations')
+        .withIndex('by_tab_id', (q) => q.eq('tabId', args.tabId))
+        .collect()
+      const customerIds = visitations.map((visitation) => visitation.customerId)
+
       return {
         ...tab,
+        customerIds,
         isFullyPaid,
         restaurant,
         menuItems,
@@ -159,6 +166,16 @@ export const visit = mutation({
 
     if (tab.closedAt) {
       throw new ConvexError('TAB_CLOSED')
+    }
+
+    const visitation = await ctx.db
+      .query('tabVisitations')
+      .withIndex('by_tab_id', (q) =>
+        q.eq('tabId', args.tabId).eq('customerId', args.customerId),
+      )
+      .first()
+    if (visitation) {
+      return
     }
 
     await ctx.db.insert('tabVisitations', {

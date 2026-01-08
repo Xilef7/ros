@@ -1,6 +1,6 @@
 import { preloadedQueryResult } from 'convex/nextjs'
 import { TabId } from '@/lib/types'
-import { cachedPreloadTab } from './cache'
+import { cachedPreloadTab, cachedVisitTab } from './cache'
 import { Room } from './Room'
 
 export default async function Layout({
@@ -18,6 +18,8 @@ export default async function Layout({
   if (tab.closedAt) {
     return children
   }
+
+  await cachedVisitTab(tabId as TabId)
 
   return <Room tabId={tabId as TabId}>{children}</Room>
 }

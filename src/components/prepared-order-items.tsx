@@ -131,7 +131,7 @@ function OrderItem({
           <XIcon size={12} /> {quantity}
           {isShared && <Badge>Shared</Badge>}
         </ItemTitle>
-        <ItemDescription>
+        <ItemDescription className="line-clamp-none">
           <OrderItemCustomizations
             customizations={Object.entries(customizations)}
           />

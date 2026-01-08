@@ -125,16 +125,18 @@ export default function CustomizationsConfigurator({
                   <Fragment key={customization.name}>
                     <FieldSet>
                       <FieldLegend>{customization.name}</FieldLegend>
-                      <FieldDescription className="flex items-center gap-2">
-                        {constraint}
-                        {selectedCustomization.length < minSelected ? (
-                          <CheckCircle2Icon className="stroke-muted-foreground" />
-                        ) : selectedCustomization.length > maxSelected ? (
-                          <XCircleIcon className="stroke-destructive" />
-                        ) : (
-                          <CheckCircle2Icon className="stroke-green-600" />
-                        )}
-                      </FieldDescription>
+                      {constraint && (
+                        <FieldDescription className="flex items-center gap-2">
+                          {constraint}
+                          {selectedCustomization.length < minSelected ? (
+                            <CheckCircle2Icon className="stroke-muted-foreground" />
+                          ) : selectedCustomization.length > maxSelected ? (
+                            <XCircleIcon className="stroke-destructive" />
+                          ) : (
+                            <CheckCircle2Icon className="stroke-green-600" />
+                          )}
+                        </FieldDescription>
+                      )}
                       <FieldGroup>
                         {customization.options.map((option) => {
                           const id = `${customization.name}.${option.name}`

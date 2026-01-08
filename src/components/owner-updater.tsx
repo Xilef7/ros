@@ -15,10 +15,14 @@ import {
   OrderItemId,
   convertStrToDbOwnerId,
 } from '@/lib/types'
-import { useOwnerConvexMutations, useVisitingUsers } from '@/lib/hooks/convex'
+import {
+  useOwnerConvexMutations,
+  useVisitingUsers as useVisitingUserIds,
+} from '@/lib/hooks/convex'
 import { useOwnerLiveblocksMutations } from '@/lib/hooks/liveblocks'
 import { Toggle } from '@/components/ui/toggle'
 import { Spinner } from './ui/spinner'
+import { OwnerName } from './name-client'
 
 export function OwnerUpdaterCurrent({
   orderItemId,
@@ -71,13 +75,13 @@ function OwnerUpdater({
   handleRemoveOwner: (ownerId: OwnerId) => void
   ownerIds: ReadonlyArray<OwnerId>
 }) {
-  const visitingUsers = useVisitingUsers()
+  const visitingUserIds = useVisitingUserIds()
 
-  if (visitingUsers === undefined) {
+  if (visitingUserIds === undefined) {
     return <Spinner />
   }
 
-  if ('error' in visitingUsers) {
+  if ('error' in visitingUserIds) {
     return <CircleAlertIcon />
   }
 
@@ -91,7 +95,7 @@ function OwnerUpdater({
           <DialogTitle>Share with</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col max-h-[50vh] overflow-y-auto gap-1 p-2">
-          {visitingUsers.map(({ id: userId, name: userName }) => {
+          {visitingUserIds.map((userId) => {
             const isOwner = ownerIds.includes(userId)
             return (
               <Toggle
@@ -104,7 +108,9 @@ function OwnerUpdater({
                 className="group data-[state=on]:bg-primary data-[state=on]:text-white data-[state=off]:border-primary data-[state=off]:border flex flex-row p-2 pr-4 rounded-full"
               >
                 <OwnerAvatar id={userId} />
-                <div className="flex-1 text-left">{userName}</div>
+                <div className="flex-1 text-left">
+                  <OwnerName id={userId} />
+                </div>
                 <div className="group-data-[state=off]:text-primary">
                   {isOwner ? 'Remove' : 'Add'}
                 </div>

@@ -135,7 +135,7 @@ function OrderItem({
           {menuItem ? menuItem.name : <Skeleton className="h-5 w-[100px]" />}{' '}
           {isShared && <Badge>Shared</Badge>}
         </ItemTitle>
-        <ItemDescription>
+        <ItemDescription className="line-clamp-none">
           <OrderItemCustomizations
             customizations={customizations.entries().toArray()}
           />

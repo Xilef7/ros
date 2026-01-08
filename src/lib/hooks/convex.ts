@@ -42,19 +42,9 @@ export function useVisitingUsers() {
   }
 
   return [
-    ...Object.entries(tab.customerNames).map(
-      ([id, name]): { id: CustomerId; name: string } => ({
-        id: `CustomerId.${id}`,
-        name,
-      }),
-    ),
-    ...Object.entries(tab.guestNames).map(
-      ([id, name]): { id: GuestId; name: string } => ({
-        id: `GuestId.${id}`,
-        name,
-      }),
-    ),
-  ].sort(({ name: a }, { name: b }) => a.localeCompare(b))
+    ...tab.customerIds.map((id): CustomerId => `CustomerId.${id}`),
+    ...Object.keys(tab.guestNames).map((id): GuestId => `GuestId.${id}`),
+  ]
 }
 
 export function useOwnerConvexMutations() {

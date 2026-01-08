@@ -66,7 +66,7 @@ export default function MenuPage() {
 
       <ButtonGroup className="fixed bottom-0 w-full z-10 p-2 pb-4">
         <Button
-          onClick={() => router.push(`order/current`)}
+          onClick={() => router.push(`../order/current`)}
           variant="default"
           vibe="friendly"
           className="w-full h-10"
