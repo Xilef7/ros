@@ -6,10 +6,10 @@ export async function GET(
   ctx: RouteContext<'/api/users/[userId]'>,
 ) {
   const { userId } = await ctx.params
+  const [, customerId] = userId.split('.')
 
   const client = await clerkClient()
-
-  const user = await client.users.getUser(userId)
+  const user = await client.users.getUser(customerId)
 
   return NextResponse.json({
     fullName: user.fullName,
