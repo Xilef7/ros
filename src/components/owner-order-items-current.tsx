@@ -141,7 +141,7 @@ function OrderItem({
           />
         </ItemDescription>
         {isShared && (
-          <div className="flex flex-row">
+          <div className="flex flex-row items-center gap-4">
             <OwnerStack>
               {ownerIds.map((ownerId) => (
                 <OwnerAvatar key={ownerId} id={ownerId} />

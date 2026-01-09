@@ -43,8 +43,12 @@ export default function MenuOrderItems({
   const allOwnerIds = new Set(
     orderItems.flatMap((orderItem) => orderItem.ownerIds),
   )
-  const hasOrdered = myOwnerId && allOwnerIds.has(myOwnerId)
-  const othersCount = allOwnerIds.size - (hasOrdered ? 1 : 0)
+  const shownOwnerId =
+    myOwnerId && allOwnerIds.has(myOwnerId)
+      ? myOwnerId
+      : allOwnerIds.values().next().value
+  const othersCount = shownOwnerId ? allOwnerIds.size - 1 : 0
+
   const itemsCount = orderItems.reduce(
     (sum, orderItem) => sum + orderItem.quantity,
     0,
@@ -96,7 +100,7 @@ export default function MenuOrderItems({
   return (
     <>
       <OwnerStack>
-        {hasOrdered && <OwnerAvatar id={myOwnerId} />}
+        {shownOwnerId && <OwnerAvatar id={shownOwnerId} />}
         {othersCount > 0 && (
           <Avatar>
             <AvatarFallback>+{othersCount}</AvatarFallback>

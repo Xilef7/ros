@@ -28,12 +28,6 @@ import { api } from '@/convex/_generated/api'
 import { useCurrentTabId } from '@/lib/hooks/params'
 import { useSelectedLayoutSegment } from 'next/navigation'
 import { useMyGuestId } from '@/lib/hooks/user'
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyTitle,
-} from '@/components/ui/empty'
 
 export default function GuestPickerWrapper() {
   const segment = useSelectedLayoutSegment()
@@ -81,6 +75,16 @@ function GuestPickerLoaded({
     return <CircleAlertIcon />
   }
 
+  if (!tab) {
+    return null
+  }
+
+  const isFirstGuest = Object.keys(tab.guestNames).length === 0
+
+  if (tab.closedAt && isFirstGuest) {
+    return null
+  }
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger className="flex flex-row items-center">
@@ -98,14 +102,18 @@ function GuestPickerLoaded({
           </>
         )}
       </AlertDialogTrigger>
-      <AlertDialogContent className="max-h-[50vh] overflow-hidden flex flex-col items-center">
+      <AlertDialogContent className="max-h-[50vh] overflow-hidden flex flex-col items-stretch">
         <AlertDialogHeader>
-          <AlertDialogTitle>Who are You?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {isFirstGuest ? 'You are the first one here!' : 'Who are You?'}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            Choose your name from the list
+            {isFirstGuest
+              ? 'Enter your name to start!'
+              : 'Choose your name from the list!'}
           </AlertDialogDescription>
         </AlertDialogHeader>
-        {tab && !tab.closedAt && (
+        {!tab.closedAt && (
           <Item>
             <ItemContent>
               <Input
@@ -135,47 +143,32 @@ function GuestPickerLoaded({
           </Item>
         )}
         <ItemGroup className="overflow-y-auto flex-1">
-          {tab ? (
-            Object.keys(tab.guestNames).length > 0 ? (
-              Object.entries(tab.guestNames)
-                .sort(([, a], [, b]) => a.localeCompare(b))
-                .map(([guestIdValue, name]) => {
-                  return (
-                    <Item
-                      key={guestIdValue}
-                      onClick={() => setGuestId(guestIdValue)}
-                      size="sm"
-                      variant={
-                        guestIdValue === myGuestIdValue ? 'outline' : 'default'
-                      }
-                    >
-                      <ItemMedia>
-                        <OwnerAvatar
-                          id={convertDbToStrOwnerId({
-                            kind: 'GuestId',
-                            value: guestIdValue,
-                          })}
-                        />
-                      </ItemMedia>
-                      <ItemContent>
-                        <ItemTitle>{name}</ItemTitle>
-                      </ItemContent>
-                    </Item>
-                  )
-                })
-            ) : (
-              <Empty>
-                <EmptyHeader>
-                  <EmptyTitle>You are the first one here</EmptyTitle>
-                  <EmptyDescription>
-                    Add new guest name to start!
-                  </EmptyDescription>
-                </EmptyHeader>
-              </Empty>
-            )
-          ) : (
-            <Spinner />
-          )}
+          {Object.entries(tab.guestNames)
+            .sort(([, a], [, b]) => a.localeCompare(b))
+            .map(([guestIdValue, name]) => {
+              return (
+                <Item
+                  key={guestIdValue}
+                  onClick={() => setGuestId(guestIdValue)}
+                  size="sm"
+                  variant={
+                    guestIdValue === myGuestIdValue ? 'outline' : 'default'
+                  }
+                >
+                  <ItemMedia>
+                    <OwnerAvatar
+                      id={convertDbToStrOwnerId({
+                        kind: 'GuestId',
+                        value: guestIdValue,
+                      })}
+                    />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>{name}</ItemTitle>
+                  </ItemContent>
+                </Item>
+              )
+            })}
         </ItemGroup>
       </AlertDialogContent>
     </AlertDialog>

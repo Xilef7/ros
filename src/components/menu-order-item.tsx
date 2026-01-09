@@ -33,7 +33,7 @@ export default function MenuOrderItem({
   return (
     <Item>
       <ItemHeader>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center gap-4">
           <OwnerStack>
             {orderItem.ownerIds.map((ownerId) => (
               <OwnerAvatar key={ownerId} id={ownerId} />

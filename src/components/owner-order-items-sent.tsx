@@ -135,7 +135,7 @@ function OrderItem({
           />
         </ItemDescription>
         {isShared && (
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center gap-4">
             <OwnerStack>
               {ownerStringIds.map(renderAvatar)}
               {isTabOpen && (

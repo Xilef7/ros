@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -93,6 +94,9 @@ function OwnerUpdater({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Share with</DialogTitle>
+          <DialogDescription>
+            Price is split among the selected people
+          </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col max-h-[50vh] overflow-y-auto gap-1 p-2">
           {visitingUserIds.map((userId) => {
