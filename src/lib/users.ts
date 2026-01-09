@@ -1,7 +1,7 @@
 import 'server-only'
 import { cache } from 'react'
 import { convertStrToDbOwnerId, CustomerId, GuestId, TabId } from './types'
-import { clerkClient } from '@clerk/nextjs/server'
+import { auth, clerkClient } from '@clerk/nextjs/server'
 import { fetchQuery } from 'convex/nextjs'
 import { api } from '@/convex/_generated/api'
 
@@ -15,9 +15,18 @@ export const getCustomer = cache(async (id: CustomerId) => {
 })
 
 export const getGuest = cache(async (id: GuestId) => {
+  const { getToken } = await auth()
+  const convexToken = await getToken({ template: 'convex' })
+
   const { value } = convertStrToDbOwnerId(id)
   const [tabId] = value.split('.')
-  const tab = await fetchQuery(api.tabs.get, { tabId: tabId as TabId })
+  const tab = await fetchQuery(
+    api.tabs.get,
+    { tabId: tabId as TabId },
+    {
+      token: convexToken ?? undefined,
+    },
+  )
   if (typeof tab === 'object' && 'error' in tab) {
     throw new Error(tab.error)
   }
