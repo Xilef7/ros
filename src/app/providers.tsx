@@ -1,12 +1,13 @@
 'use client'
 
-import { ClerkProvider } from '@clerk/nextjs'
+import { ClerkProvider, useAuth } from '@clerk/nextjs'
 import {
   QueryClient,
   QueryClientProvider,
   isServer,
 } from '@tanstack/react-query'
-import { ConvexProvider, ConvexReactClient } from 'convex/react'
+import { ConvexReactClient } from 'convex/react'
+import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import * as React from 'react'
 
 function makeQueryClient() {
@@ -37,11 +38,11 @@ export default function Providers(props: { children: React.ReactNode }) {
 
   return (
     <ClerkProvider>
-      <ConvexProvider client={convex}>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <QueryClientProvider client={queryClient}>
           {props.children}
         </QueryClientProvider>
-      </ConvexProvider>
+      </ConvexProviderWithClerk>
     </ClerkProvider>
   )
 }
