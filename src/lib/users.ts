@@ -19,7 +19,7 @@ export const getGuest = cache(async (id: GuestId) => {
   const [tabId] = value.split('.')
   const tab = await fetchQuery(api.tabs.get, { tabId: tabId as TabId })
   if (typeof tab === 'object' && 'error' in tab) {
-    throw new Error('TAB_NOT_FOUND')
+    throw new Error(tab.error)
   }
   const name = tab.guestNames[value]
   if (name === undefined) {
