@@ -20,7 +20,7 @@ The intended flow for using this app is through scanning a QR code given by welc
 
 ## Motivation
 
-I'm building this project purely for learning purpose. The problems solved are mostly made up. The technologies chosen may not be the most suitable for this project.
+I'm building this project purely for learning purpose. The problems solved are mostly made up. The technologies chosen may not be the most suitable for this project. I intentionally chose new technologies just for the sake of learning them. I chose Next.js because I want to learn about the new React Server Components. I chose Convex and Liveblocks because I want the real-time update feature for this app. In this project, I experimented with LLM for generating some code which ends up not being used, but gave some ideas for the UI design.
 
 ## How to run locally
 
