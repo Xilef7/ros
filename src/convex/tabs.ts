@@ -70,7 +70,7 @@ export const get = query({
           ...restaurant,
           photoPathinfo:
             restaurant.photoPathId &&
-            (await ctx.storage.getUrl(restaurant.photoPathId)),
+            ((await ctx.storage.getUrl(restaurant.photoPathId)) ?? undefined),
         },
         menuItems,
       }

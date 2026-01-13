@@ -15,7 +15,7 @@ export const get = query({
       ...menuItem,
       photoPathinfo:
         menuItem.photoPathId &&
-        (await ctx.storage.getUrl(menuItem.photoPathId)),
+        ((await ctx.storage.getUrl(menuItem.photoPathId)) ?? undefined),
     }
   },
 })

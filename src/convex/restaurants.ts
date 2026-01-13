@@ -24,7 +24,7 @@ export const list = query({
           ...restaurant,
           photoPathinfo:
             restaurant.photoPathId &&
-            (await ctx.storage.getUrl(restaurant.photoPathId)),
+            ((await ctx.storage.getUrl(restaurant.photoPathId)) ?? undefined),
         })),
       ),
     }
@@ -48,7 +48,7 @@ export const get = query({
         ...restaurant,
         photoPathinfo:
           restaurant.photoPathId &&
-          (await ctx.storage.getUrl(restaurant.photoPathId)),
+          ((await ctx.storage.getUrl(restaurant.photoPathId)) ?? undefined),
         menu: menuItems,
       }
     }),
@@ -85,7 +85,7 @@ export async function getAvailableMenuItems(
           ...menuItem,
           photoPathinfo:
             menuItem.photoPathId &&
-            (await ctx.storage.getUrl(menuItem.photoPathId)),
+            ((await ctx.storage.getUrl(menuItem.photoPathId)) ?? undefined),
         }
       }),
     )
