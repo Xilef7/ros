@@ -13,8 +13,22 @@ async function tryCatch<T>(fn: () => Promise<T>) {
 
 export const list = query({
   args: { paginationOpts: paginationOptsValidator },
-  handler: (ctx, args) =>
-    ctx.db.query('restaurants').paginate(args.paginationOpts),
+  handler: async (ctx, args) => {
+    const results = await ctx.db
+      .query('restaurants')
+      .paginate(args.paginationOpts)
+    return {
+      ...results,
+      page: await Promise.all(
+        results.page.map(async (restaurant) => ({
+          ...restaurant,
+          photoPathinfo:
+            restaurant.photoPathId &&
+            (await ctx.storage.getUrl(restaurant.photoPathId)),
+        })),
+      ),
+    }
+  },
 })
 
 export const get = query({
@@ -32,6 +46,9 @@ export const get = query({
 
       return {
         ...restaurant,
+        photoPathinfo:
+          restaurant.photoPathId &&
+          (await ctx.storage.getUrl(restaurant.photoPathId)),
         menu: menuItems,
       }
     }),
@@ -58,10 +75,18 @@ export async function getAvailableMenuItems(
     await Promise.all(
       restaurant.menu.map(async (menuItemId) => {
         const menuItem = await ctx.db.get(menuItemId)
-        if (menuItem?.deletedAt) {
+        if (!menuItem) {
           return null
         }
-        return menuItem
+        if (menuItem.deletedAt) {
+          return null
+        }
+        return {
+          ...menuItem,
+          photoPathinfo:
+            menuItem.photoPathId &&
+            (await ctx.storage.getUrl(menuItem.photoPathId)),
+        }
       }),
     )
   ).filter((menuItem) => menuItem !== null)

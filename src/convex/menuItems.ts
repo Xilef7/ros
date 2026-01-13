@@ -11,6 +11,11 @@ export const get = query({
       throw new ConvexError('MENU_ITEM_NOT_FOUND')
     }
 
-    return menuItem
+    return {
+      ...menuItem,
+      photoPathinfo:
+        menuItem.photoPathId &&
+        (await ctx.storage.getUrl(menuItem.photoPathId)),
+    }
   },
 })

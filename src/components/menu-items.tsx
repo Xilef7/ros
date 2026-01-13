@@ -36,8 +36,7 @@ export default function MenuItems({
                   <Image
                     src={menuItem.photoPathinfo}
                     alt={menuItem.name}
-                    width={256}
-                    height={256}
+                    fill
                   />
                 ) : (
                   <ImageOffIcon size={24} />

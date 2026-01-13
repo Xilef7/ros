@@ -66,7 +66,12 @@ export const get = query({
         ...tab,
         customerIds,
         isFullyPaid,
-        restaurant,
+        restaurant: {
+          ...restaurant,
+          photoPathinfo:
+            restaurant.photoPathId &&
+            (await ctx.storage.getUrl(restaurant.photoPathId)),
+        },
         menuItems,
       }
     }),

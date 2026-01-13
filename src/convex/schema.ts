@@ -47,6 +47,7 @@ export default defineSchema({
     name: v.string(),
     description: v.optional(v.string()),
     photoPathinfo: v.optional(v.string()),
+    photoPathId: v.optional(v.id('_storage')),
     price: v.number(),
     portionSize: v.number(),
     customizations: v.array(
@@ -69,6 +70,7 @@ export default defineSchema({
   restaurants: defineTable({
     name: v.string(),
     photoPathinfo: v.optional(v.string()),
+    photoPathId: v.optional(v.id('_storage')),
     address: v.string(),
     openTime: v.optional(
       v.object({

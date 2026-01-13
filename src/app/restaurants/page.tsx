@@ -52,13 +52,15 @@ export default function RestaurantsPage() {
       <ItemGroup className="my-4 gap-4">
         {results.map((restaurant) => (
           <Item key={restaurant._id} variant="outline">
-            <ItemMedia variant={restaurant.photoPathinfo ? 'image' : 'icon'}>
+            <ItemMedia
+              variant={restaurant.photoPathinfo ? 'image' : 'icon'}
+              className="size-9"
+            >
               {restaurant.photoPathinfo ? (
                 <Image
                   src={restaurant.photoPathinfo}
                   alt={restaurant.name}
-                  width={400}
-                  height={160}
+                  fill
                 />
               ) : (
                 <ImageOffIcon />
