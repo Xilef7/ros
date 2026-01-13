@@ -51,33 +51,35 @@ export default function RestaurantsPage() {
 
       <ItemGroup className="my-4 gap-4">
         {results.map((restaurant) => (
-          <Item key={restaurant._id} variant="outline">
-            <ItemMedia
-              variant={restaurant.photoPathinfo ? 'image' : 'icon'}
-              className="size-9"
-            >
-              {restaurant.photoPathinfo ? (
-                <Image
-                  src={restaurant.photoPathinfo}
-                  alt={restaurant.name}
-                  fill
-                />
-              ) : (
-                <ImageOffIcon />
-              )}
-            </ItemMedia>
+          <Link key={restaurant._id} href={`/restaurants/${restaurant._id}`}>
+            <Item variant="outline">
+              <ItemMedia
+                variant={restaurant.photoPathinfo ? 'image' : 'icon'}
+                className="size-9"
+              >
+                {restaurant.photoPathinfo ? (
+                  <Image
+                    src={restaurant.photoPathinfo}
+                    alt={restaurant.name}
+                    fill
+                  />
+                ) : (
+                  <ImageOffIcon />
+                )}
+              </ItemMedia>
 
-            <ItemContent>
-              <ItemTitle>{restaurant.name}</ItemTitle>
-              <ItemDescription>{restaurant.address}</ItemDescription>
-            </ItemContent>
+              <ItemContent>
+                <ItemTitle>{restaurant.name}</ItemTitle>
+                <ItemDescription>{restaurant.address}</ItemDescription>
+              </ItemContent>
 
-            <ItemActions>
-              <Button asChild>
-                <Link href={`/restaurants/${restaurant._id}`}>See Menu</Link>
-              </Button>
-            </ItemActions>
-          </Item>
+              <ItemActions>
+                <Button asChild>
+                  <div>See Menu</div>
+                </Button>
+              </ItemActions>
+            </Item>
+          </Link>
         ))}
       </ItemGroup>
 
