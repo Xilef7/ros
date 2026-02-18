@@ -1,3 +1,10 @@
+# Restaurant Ordering System
+
+![Browse Screenshot](assets/screenshot-browse.png)
+![Restaurant Screenshot](assets/screenshot-restaurant.png)
+![Order Screenshot](assets/screenshot-order.png)
+![Tab Screenshot](assets/screenshot-tab.png)
+
 This project is a web service for restaurant ordering system.
 The demo app is deployed at https://ros-pi.vercel.app/.
 The intended flow for using this app is through scanning a QR code given by welcome staff at a restaurant. But for the demo, you can manually create new tab by pressing the (+) button at the restaurant page.
