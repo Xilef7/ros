@@ -18,7 +18,7 @@ import {
 } from '@/lib/types'
 import { formatPrice } from '@/lib/price'
 import { Doc, Id } from '@/convex/_generated/dataModel'
-import OwnerStack from './owner-stack'
+import OwnerStack, { AdditionalAvatar } from './owner-stack'
 import OrderItemCustomizations from './order-item-customizations'
 import MenuItemImage from './menu-item-image'
 import { OwnerUpdaterSent } from './owner-updater'
@@ -139,10 +139,12 @@ function OrderItem({
             <OwnerStack>
               {ownerStringIds.map(renderAvatar)}
               {isTabOpen && (
-                <OwnerUpdaterSent
-                  orderItemId={orderItemId}
-                  ownerIds={ownerStringIds}
-                />
+                <AdditionalAvatar>
+                  <OwnerUpdaterSent
+                    orderItemId={orderItemId}
+                    ownerIds={ownerStringIds}
+                  />
+                </AdditionalAvatar>
               )}
             </OwnerStack>
             {isTabOpen && (

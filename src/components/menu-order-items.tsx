@@ -23,8 +23,7 @@ import { Doc } from '@/convex/_generated/dataModel'
 import CustomizationsConfigurator from './customizations-configurator'
 import { useMyOwnerId } from '@/lib/hooks/user'
 import OwnerAvatar from './user-avatar-client'
-import OwnerStack from './owner-stack'
-import { Avatar, AvatarFallback } from './ui/avatar'
+import OwnerStack, { AdditionalAvatar } from './owner-stack'
 
 export default function MenuOrderItems({
   menuItem,
@@ -101,11 +100,7 @@ export default function MenuOrderItems({
     <>
       <OwnerStack>
         {shownOwnerId && <OwnerAvatar id={shownOwnerId} />}
-        {othersCount > 0 && (
-          <Avatar>
-            <AvatarFallback>+{othersCount}</AvatarFallback>
-          </Avatar>
-        )}
+        {othersCount > 0 && <AdditionalAvatar>+{othersCount}</AdditionalAvatar>}
       </OwnerStack>
       <Drawer>
         {orderItems.length > 0 ? (
